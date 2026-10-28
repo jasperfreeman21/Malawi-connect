@@ -1,124 +1,228 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <wonderful  charset="UTF-8">
-<mzilahowa  name="viewport" content="width=device-width, initial-scale=1">
-<title>Malawi Connect</title>
+<mzilahowa  name="viewport" content="width=device-width, initial-scale=1.0">
+<mzilahowa  name="theme-color" content="#087443">
+<title>Malawi Connect | Everything Malawi</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f6f3;color:#183126}
-header{background:#086b45;color:white;padding:17px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.logo{font-size:21px;font-weight:bold}
-header button,.btn{border:0;border-radius:9px;padding:10px 13px;font-weight:bold;cursor:pointer}
-header button{background:#f5c342;color:#183126}
-main{max-width:1000px;margin:auto;padding:16px}
-.hero{background:linear-gradient(135deg,#075333,#15945d);color:white;padding:27px 20px;border-radius:18px}
-.hero h1{font-size:34px;margin:10px 0}
-.hero p{line-height:1.6}
-.btn{background:#f5c342;color:#183126;margin-top:8px}
-.search{display:flex;gap:8px;margin:20px 0}
-input{min-width:0;flex:1;padding:13px;border:1px solid #ccd8ce;border-radius:10px;font-size:16px}
-.search button{background:#086b45;color:white;border:0;border-radius:10px;padding:12px}
-h2{font-size:22px;margin-top:28px}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f6f4;color:#18251e}
+header{background:#087443;color:white;padding:20px 16px;border-radius:0 0 22px 22px}
+.brand{font-size:25px;font-weight:800}
+.brand span{color:#ffd447}
+header p{margin:8px 0 16px}
+.search{width:100%;padding:14px;border:0;border-radius:12px;font-size:16px}
+nav{display:flex;gap:8px;overflow:auto;padding:14px 10px;background:white}
+nav a{color:#087443;text-decoration:none;font-weight:bold;white-space:nowrap;padding:8px}
+main{padding:14px;max-width:800px;margin:auto}
+.hero{background:linear-gradient(130deg,#087443,#13a56a);color:white;padding:24px;border-radius:18px}
+.hero h1{font-size:28px;margin:0 0 10px}
+.hero p{line-height:1.5}
+.button{display:inline-block;background:#ffd447;color:#183c29;padding:12px 16px;border:0;border-radius:10px;font-weight:bold;text-decoration:none;cursor:pointer}
+h2{font-size:20px;margin-top:25px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:white;border:1px solid #e0e9e1;border-radius:15px;padding:17px;text-align:left;color:#183126;cursor:pointer}
-.card:active{transform:scale(.98)}
-.icon{font-size:30px}
-.card h3{margin:10px 0 6px}
-.card p{font-size:13px;color:#64766a;line-height:1.5;margin-bottom:0}
-.panel{background:white;border-radius:15px;padding:17px;margin-top:20px}
-.item{padding:12px 0;border-bottom:1px solid #e5ebe5}
-.item:last-child{border:0}
-footer{text-align:center;color:#65766b;padding:25px 8px;font-size:13px}
-#message{background:#123c29;color:white;padding:13px;border-radius:10px;display:none;margin-top:15px}
-@media(min-width:650px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.hero{padding:45px}.hero h1{font-size:48px}}
+.card{background:white;padding:16px 12px;border-radius:14px;box-shadow:0 2px 8px #0000000b}
+.card .emoji{font-size:30px}
+.card h3{margin:8px 0 5px;font-size:16px}
+.card p{font-size:13px;color:#617067;line-height:1.5}
+.card button,.action{background:#e4f5eb;color:#087443;border:0;padding:10px;border-radius:9px;font-weight:bold;cursor:pointer}
+.section{scroll-margin-top:10px}
+input,textarea,select{font:inherit}
+.form{display:grid;gap:10px;background:white;padding:15px;border-radius:14px}
+.form input,.form textarea,.form select{padding:12px;border:1px solid #d5ded8;border-radius:9px;width:100%}
+.post{background:white;padding:15px;border-radius:12px;margin-bottom:10px;overflow-wrap:anywhere}
+footer{margin-top:30px;background:#073d2a;color:white;text-align:center;padding:25px 15px}
+.small{font-size:12px;color:#617067}
+#notice{position:sticky;bottom:8px;background:#173e2c;color:white;padding:12px;border-radius:10px;display:none;margin-top:12px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">🇲🇼 Malawi Connect</div>
-  <button onclick="say('Welcome to Malawi Connect!')">Join us</button>
+<div class="brand">🇲🇼 Malawi <span>Connect</span></div>
+<p>One country. One platform. Endless possibilities.</p>
+<input id="search" class="search" placeholder="Search products, jobs, services..." oninput="searchItems()">
 </header>
 
+<nav>
+<a href="#services">Services</a>
+<a href="#market">Market</a>
+<a href="#jobs">Jobs</a>
+<a href="#transport">Transport</a>
+<a href="#food">Food</a>
+<a href="#social">Community</a>
+</nav>
+
 <main>
-  <section class="hero">
-    <div>YOUR COUNTRY. YOUR COMMUNITY.</div>
-    <h1>Everything Malawi.<br>One platform.</h1>
-    <p>Connect with people, buy and sell, find jobs, learn new skills, book rides and order food.</p>
-    <button class="btn" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore services ↓</button>
-  </section>
+<section class="hero">
+<h1>Welcome to Malawi Connect!</h1>
+<p>Discover products, find jobs, learn new skills, order food and connect with people across Malawi.</p>
+<a class="button" href="#services">Explore services ↓</a>
+</section>
 
-  <form class="search" id="searchForm">
-    <input id="search" placeholder="Search jobs, food, products..." aria-label="Search">
-    <button type="submit">Search</button>
-  </form>
+<section id="services" class="section">
+<h2>Explore our services</h2>
+<div class="grid">
+<div class="card searchable"><div class="emoji">🛍️</div><h3>Marketplace</h3><p>Buy and sell products locally.</p><a class="action" href="#market">Explore market</a></div>
+<div class="card searchable"><div class="emoji">💼</div><h3>Jobs & Careers</h3><p>Discover work opportunities.</p><a class="action" href="#jobs">Find jobs</a></div>
+<div class="card searchable"><div class="emoji">🎓</div><h3>Education</h3><p>Discover learning resources.</p><a class="action" href="#education">Start learning</a></div>
+<div class="card searchable"><div class="emoji">🏍️</div><h3>Kabaza</h3><p>Connect with motorcycle transport providers.</p><a class="action" href="#transport">Request ride</a></div>
+<div class="card searchable"><div class="emoji">🚕</div><h3>Taxi</h3><p>Request a taxi ride.</p><a class="action" href="#transport">Request taxi</a></div>
+<div class="card searchable"><div class="emoji">🍔</div><h3>Food delivery</h3><p>Discover food and local restaurants.</p><a class="action" href="#food">Explore food</a></div>
+<div class="card searchable"><div class="emoji">👥</div><h3>Social community</h3><p>Share updates with visitors to this website.</p><a class="action" href="#social">Join community</a></div>
+<div class="card searchable"><div class="emoji">🏠</div><h3>Property</h3><p>Explore houses and rentals.</p><a class="action" href="#market">Browse listings</a></div>
+</div>
+</section>
 
-  <h2 id="services">Explore Malawi Connect</h2>
-  <div class="grid">
-    <button class="card" onclick="openService('Social Media')">
-      <div class="icon">💬</div><h3>Social Media</h3>
-      <p>Connect, share posts and meet people.</p>
-    </button>
-    <button class="card" onclick="openService('Marketplace')">
-      <div class="icon">🛍️</div><h3>Marketplace</h3>
-      <p>Buy, sell and promote your products.</p>
-    </button>
-    <button class="card" onclick="openService('Jobs')">
-      <div class="icon">💼</div><h3>Jobs</h3>
-      <p>Discover vacancies and career opportunities.</p>
-    </button>
-    <button class="card" onclick="openService('Education')">
-      <div class="icon">🎓</div><h3>Education</h3>
-      <p>Find courses, scholarships and learning resources.</p>
-    </button>
-    <button class="card" onclick="openService('Kabaza Motorbike')">
-      <div class="icon">🏍️</div><h3>Kabaza</h3>
-      <p>Request a motorbike taxi ride.</p>
-    </button>
-    <button class="card" onclick="openService('Taxi Booking')">
-      <div class="icon">🚕</div><h3>Taxi Booking</h3>
-      <p>Find transport for your journey.</p>
-    </button>
-    <button class="card" onclick="openService('Food Delivery')">
-      <div class="icon">🍔</div><h3>Food Delivery</h3>
-      <p>Discover restaurants and order meals.</p>
-    </button>
-    <button class="card" onclick="openService('Business Directory')">
-      <div class="icon">🏪</div><h3>Businesses</h3>
-      <p>Discover shops and local services.</p>
-    </button>
-  </div>
+<section id="market" class="section">
+<h2>🛍️ Marketplace</h2>
+<p class="small">Sample listings — add your own below.</p>
+<div class="grid" id="products">
+<div class="card searchable"><div class="emoji">📱</div><h3>Mobile phones</h3><p>Explore phones and accessories.</p></div>
+<div class="card searchable"><div class="emoji">👕</div><h3>Fashion</h3><p>Clothing, shoes and more.</p></div>
+<div class="card searchable"><div class="emoji">🥬</div><h3>Fresh produce</h3><p>Discover local farm products.</p></div>
+</div>
+<h3>Post a product</h3>
+<form class="form" id="productForm">
+<input name="title" placeholder="Product name" required>
+<input name="price" placeholder="Price in MWK" required>
+<input name="contact" placeholder="Your phone number or contact" required>
+<textarea name="description" placeholder="Product description"></textarea>
+<button class="button">Add product listing</button>
+</form>
+</section>
 
-  <div class="panel">
-    <h2>Discover opportunities</h2>
-    <div class="item">📣 <b>Grow your business</b><p>Reach customers across Malawi.</p></div>
-    <div class="item">📚 <b>Learn and grow</b><p>Build skills for your future.</p></div>
-    <div class="item">🤝 <b>Connect with Malawi</b><p>Discover people and communities.</p></div>
-  </div>
+<section id="jobs" class="section">
+<h2>💼 Jobs & Careers</h2>
+<p>Discover opportunities and share job vacancies.</p>
+<form class="form" id="jobForm">
+<input name="title" placeholder="Job title" required>
+<input name="company" placeholder="Company or employer" required>
+<input name="location" placeholder="Location in Malawi" required>
+<input name="contact" placeholder="Application contact" required>
+<button class="button">Post job vacancy</button>
+</form>
+<div id="jobListings"></div>
+</section>
 
-  <div id="message" role="status"></div>
+<section id="education" class="section">
+<h2>🎓 Education & Learning</h2>
+<div class="grid">
+<div class="card"><div class="emoji">📚</div><h3>Study resources</h3><p>Organize learning materials and revision notes.</p></div>
+<div class="card"><div class="emoji">💻</div><h3>Digital skills</h3><p>Explore technology and online learning.</p></div>
+<div class="card"><div class="emoji">🏫</div><h3>Schools & colleges</h3><p>Discover education opportunities.</p></div>
+</div>
+</section>
+
+<section id="transport" class="section">
+<h2>🏍️ Transport booking</h2>
+<form class="form" id="rideForm">
+<select name="type"><option>Kabaza motorcycle</option><option>Taxi</option></select>
+<input name="pickup" placeholder="Pickup location" required>
+<input name="destination" placeholder="Destination" required>
+<input name="phone" placeholder="Your phone number" required>
+<button class="button">Prepare ride request</button>
+</form>
+</section>
+
+<section id="food" class="section">
+<h2>🍔 Food & Delivery</h2>
+<div class="grid">
+<div class="card"><div class="emoji">🍗</div><h3>Local meals</h3><p>Discover restaurants and local dishes.</p></div>
+<div class="card"><div class="emoji">🥟</div><h3>Snacks</h3><p>Explore snacks and refreshments.</p></div>
+</div>
+<form class="form" id="foodForm">
+<input name="meal" placeholder="Food or meal you want" required>
+<input name="restaurant" placeholder="Restaurant, if known">
+<input name="address" placeholder="Delivery location" required>
+<input name="phone" placeholder="Your phone number" required>
+<button class="button">Prepare food request</button>
+</form>
+</section>
+
+<section id="social" class="section">
+<h2>👥 Malawi Connect Community</h2>
+<form class="form" id="postForm">
+<input name="name" placeholder="Your display name" required>
+<textarea name="message" placeholder="What would you like to share?" required></textarea>
+<button class="button">Share update</button>
+</form>
+<div id="feed"></div>
+</section>
+
+<div id="notice" role="status"></div>
 </main>
 
 <footer>
-  🇲🇼 Malawi Connect<br>
-  One Malawi. Endless possibilities.<br><br>
-  First prototype — real accounts, listings, rides and payments are not yet connected.
+<div class="brand">🇲🇼 Malawi Connect</div>
+<p>Connecting people, businesses and opportunities across Malawi.</p>
+<p class="small">First prototype • Built for Malawi</p>
 </footer>
 
 <script>
-function say(text){
-  const box=document.getElementById('message');
-  box.textContent=text;
-  box.style.display='block';
+const notice=document.getElementById('notice');
+function inform(message){
+notice.textContent=message;
+notice.style.display='block';
+notice.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-function openService(name){
-  say(name+' selected! This service is part of the Malawi Connect plan.');
+function searchItems(){
+const q=document.getElementById('search').value.toLowerCase();
+document.querySelectorAll('.searchable').forEach(card=>{
+card.style.display=card.textContent.toLowerCase().includes(q)?'':'none';
+});
 }
-document.getElementById('searchForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  const query=document.getElementById('search').value.trim();
-  if(!query){say('Please enter what you want to find.');return;}
-  say('You searched for: '+query+'. Live search will be connected in the next development stage.');
+function addForm(id,container,render){
+document.getElementById(id).addEventListener('submit',function(e){
+e.preventDefault();
+const data=Object.fromEntries(new FormData(this).entries());
+render(data,container);
+this.reset();
+});
+}
+function safe(value){
+const el=document.createElement('span');
+el.textContent=value||'';
+return el.innerHTML;
+}
+addForm('productForm','products',(d,c)=>{
+const card=document.createElement('div');
+card.className='card searchable';
+card.innerHTML='<div class="emoji">📦</div><h3>'+safe(d.title)+'</h3><p>'+safe(d.description)+'</p><strong>MWK '+safe(d.price)+'</strong><p>Contact: '+safe(d.contact)+'</p>';
+c.prepend(card);
+inform('Product added to this page. It is not yet published online for other visitors.');
+});
+addForm('jobForm','jobListings',(d,c)=>{
+const card=document.createElement('div');
+card.className='post';
+card.innerHTML='<h3>'+safe(d.title)+'</h3><p>'+safe(d.company)+' — '+safe(d.location)+'</p><p>Contact: '+safe(d.contact)+'</p>';
+c.prepend(card);
+inform('Job added to this page. It is not yet shared with other visitors.');
+});
+addForm('rideForm','',(d)=>{
+const msg='Ride request: '+d.type+'\nPickup: '+d.pickup+'\nDestination: '+d.destination+'\nPhone: '+d.phone;
+inform('Ride request prepared. No driver has been contacted and no booking is confirmed.');
+const a=document.createElement('a');
+a.className='button';
+a.textContent='Copy ride request';
+a.href='#transport';
+a.onclick=()=>{if(navigator.clipboard)navigator.clipboard.writeText(msg);return false};
+document.getElementById('rideForm').appendChild(a);
+});
+addForm('foodForm','',(d)=>{
+inform('Food request prepared. No restaurant or delivery driver has been contacted.');
+const p=document.createElement('p');
+p.textContent='Order: '+d.meal+' | Delivery: '+d.address+' | Contact: '+d.phone;
+document.getElementById('foodForm').appendChild(p);
+});
+addForm('postForm','feed',(d,c)=>{
+const post=document.createElement('div');
+post.className='post';
+post.innerHTML='<strong>'+safe(d.name)+'</strong><p>'+safe(d.message)+'</p><small>Just now</small>';
+c.prepend(post);
+inform('Your update has been added to this page only.');
 });
 </script>
 </body>
