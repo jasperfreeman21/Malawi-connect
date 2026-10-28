@@ -3,227 +3,331 @@
 <html lang="en">
 <head>
 <wonderful  charset="UTF-8">
-<mzilahowa  name="viewport" content="width=device-width, initial-scale=1.0">
+<mzilahowa  name="viewport" content="width=device-width, initial-scale=1">
 <mzilahowa  name="theme-color" content="#087443">
-<title>Malawi Connect | Everything Malawi</title>
+<title>Malawi Connect Marketplace</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f6f4;color:#18251e}
-header{background:#087443;color:white;padding:20px 16px;border-radius:0 0 22px 22px}
-.brand{font-size:25px;font-weight:800}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f6f4;color:#19271f}
+header{background:#087443;color:white;padding:18px 15px}
+.brand{font-size:24px;font-weight:bold}
 .brand span{color:#ffd447}
-header p{margin:8px 0 16px}
-.search{width:100%;padding:14px;border:0;border-radius:12px;font-size:16px}
-nav{display:flex;gap:8px;overflow:auto;padding:14px 10px;background:white}
-nav a{color:#087443;text-decoration:none;font-weight:bold;white-space:nowrap;padding:8px}
-main{padding:14px;max-width:800px;margin:auto}
-.hero{background:linear-gradient(130deg,#087443,#13a56a);color:white;padding:24px;border-radius:18px}
-.hero h1{font-size:28px;margin:0 0 10px}
-.hero p{line-height:1.5}
-.button{display:inline-block;background:#ffd447;color:#183c29;padding:12px 16px;border:0;border-radius:10px;font-weight:bold;text-decoration:none;cursor:pointer}
-h2{font-size:20px;margin-top:25px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:white;padding:16px 12px;border-radius:14px;box-shadow:0 2px 8px #0000000b}
-.card .emoji{font-size:30px}
-.card h3{margin:8px 0 5px;font-size:16px}
-.card p{font-size:13px;color:#617067;line-height:1.5}
-.card button,.action{background:#e4f5eb;color:#087443;border:0;padding:10px;border-radius:9px;font-weight:bold;cursor:pointer}
-.section{scroll-margin-top:10px}
-input,textarea,select{font:inherit}
-.form{display:grid;gap:10px;background:white;padding:15px;border-radius:14px}
-.form input,.form textarea,.form select{padding:12px;border:1px solid #d5ded8;border-radius:9px;width:100%}
-.post{background:white;padding:15px;border-radius:12px;margin-bottom:10px;overflow-wrap:anywhere}
-footer{margin-top:30px;background:#073d2a;color:white;text-align:center;padding:25px 15px}
-.small{font-size:12px;color:#617067}
-#notice{position:sticky;bottom:8px;background:#173e2c;color:white;padding:12px;border-radius:10px;display:none;margin-top:12px}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+header p{margin:8px 0}
+nav{display:flex;gap:18px;overflow:auto;background:white;padding:14px}
+nav a{color:#087443;text-decoration:none;font-weight:bold;white-space:nowrap}
+main{max-width:1050px;margin:auto;padding:15px}
+.hero{padding:22px;background:linear-gradient(130deg,#087443,#13a56a);color:white;border-radius:16px}
+.hero h1{margin-top:0}
+button,.btn{background:#087443;color:white;border:0;border-radius:9px;padding:12px 15px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
+.yellow{background:#ffd447;color:#173b29}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccd8cf;border-radius:9px;font:inherit;background:white}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:white;border-radius:13px;overflow:hidden;box-shadow:0 2px 8px #0000000c}
+.photo{height:145px;width:100%;object-fit:cover;background:#e2eee6;display:block}
+.cardbody{padding:12px}
+.category{font-size:12px;color:#087443;font-weight:bold}
+.price{font-size:19px;color:#087443;font-weight:bold;margin:9px 0}
+.description{font-size:14px;line-height:1.45;overflow-wrap:anywhere}
+.seller{font-size:13px;color:#5c6c61;line-height:1.6}
+.card button,.card .btn{width:100%;text-align:center;margin-top:7px}
+.panel{background:white;border-radius:14px;padding:16px;margin:22px 0}
+.form{display:grid;gap:12px}
+label{font-weight:bold;font-size:14px;display:grid;gap:6px}
+.note{background:#fff6d8;border-radius:10px;padding:12px;font-size:13px;line-height:1.5}
+footer{text-align:center;background:#073d2a;color:white;padding:25px 15px;margin-top:30px}
+.small{font-size:12px;color:#637267}
+.empty{padding:25px;text-align:center;background:white;border-radius:12px;grid-column:1/-1}
+@media(min-width:650px){
+.products{grid-template-columns:repeat(3,minmax(0,1fr))}
+.filters{grid-template-columns:2fr 1fr 1fr}
+.photo{height:190px}
+}
 </style>
 </head>
 <body>
 <header>
-<div class="brand">🇲🇼 Malawi <span>Connect</span></div>
-<p>One country. One platform. Endless possibilities.</p>
-<input id="search" class="search" placeholder="Search products, jobs, services..." oninput="searchItems()">
+  <div class="brand">🇲🇼 Malawi <span>Connect</span></div>
+  <p>Buy, sell and discover products across Malawi.</p>
+  <input id="search" placeholder="🔍 Search phones, clothes, cars..." aria-label="Search products">
 </header>
 
 <nav>
-<a href="#services">Services</a>
-<a href="#market">Market</a>
-<a href="#jobs">Jobs</a>
-<a href="#transport">Transport</a>
-<a href="#food">Food</a>
-<a href="#social">Community</a>
+  <a href="#home">Home</a>
+  <a href="#marketplace">Marketplace</a>
+  <a href="#sell">Sell a product</a>
+  <a href="#about">About</a>
 </nav>
 
 <main>
-<section class="hero">
-<h1>Welcome to Malawi Connect!</h1>
-<p>Discover products, find jobs, learn new skills, order food and connect with people across Malawi.</p>
-<a class="button" href="#services">Explore services ↓</a>
+<section class="hero" id="home">
+  <h1>Everything you need, in one marketplace.</h1>
+  <p>Discover local products, compare prices and contact sellers directly.</p>
+  <a href="#marketplace" class="btn yellow">Explore products ↓</a>
 </section>
 
-<section id="services" class="section">
-<h2>Explore our services</h2>
-<div class="grid">
-<div class="card searchable"><div class="emoji">🛍️</div><h3>Marketplace</h3><p>Buy and sell products locally.</p><a class="action" href="#market">Explore market</a></div>
-<div class="card searchable"><div class="emoji">💼</div><h3>Jobs & Careers</h3><p>Discover work opportunities.</p><a class="action" href="#jobs">Find jobs</a></div>
-<div class="card searchable"><div class="emoji">🎓</div><h3>Education</h3><p>Discover learning resources.</p><a class="action" href="#education">Start learning</a></div>
-<div class="card searchable"><div class="emoji">🏍️</div><h3>Kabaza</h3><p>Connect with motorcycle transport providers.</p><a class="action" href="#transport">Request ride</a></div>
-<div class="card searchable"><div class="emoji">🚕</div><h3>Taxi</h3><p>Request a taxi ride.</p><a class="action" href="#transport">Request taxi</a></div>
-<div class="card searchable"><div class="emoji">🍔</div><h3>Food delivery</h3><p>Discover food and local restaurants.</p><a class="action" href="#food">Explore food</a></div>
-<div class="card searchable"><div class="emoji">👥</div><h3>Social community</h3><p>Share updates with visitors to this website.</p><a class="action" href="#social">Join community</a></div>
-<div class="card searchable"><div class="emoji">🏠</div><h3>Property</h3><p>Explore houses and rentals.</p><a class="action" href="#market">Browse listings</a></div>
+<section id="marketplace">
+<h2>🛍️ Explore the marketplace</h2>
+<p class="small">Browse listings or search for something specific.</p>
+<div class="filters">
+  <input id="filterSearch" placeholder="Search products..." aria-label="Filter products">
+  <select id="category" aria-label="Choose category">
+    <option value="">All categories</option>
+    <option>Phones & Electronics</option>
+    <option>Fashion</option>
+    <option>Vehicles</option>
+    <option>Property</option>
+    <option>Food & Agriculture</option>
+    <option>Home & Furniture</option>
+    <option>Beauty & Health</option>
+    <option>Other</option>
+  </select>
+  <select id="sort" aria-label="Sort products">
+    <option value="new">Newest first</option>
+    <option value="low">Price: low to high</option>
+    <option value="high">Price: high to low</option>
+  </select>
 </div>
+<p id="count" class="small"></p>
+<div id="products" class="products"></div>
 </section>
 
-<section id="market" class="section">
-<h2>🛍️ Marketplace</h2>
-<p class="small">Sample listings — add your own below.</p>
-<div class="grid" id="products">
-<div class="card searchable"><div class="emoji">📱</div><h3>Mobile phones</h3><p>Explore phones and accessories.</p></div>
-<div class="card searchable"><div class="emoji">👕</div><h3>Fashion</h3><p>Clothing, shoes and more.</p></div>
-<div class="card searchable"><div class="emoji">🥬</div><h3>Fresh produce</h3><p>Discover local farm products.</p></div>
-</div>
-<h3>Post a product</h3>
-<form class="form" id="productForm">
-<input name="title" placeholder="Product name" required>
-<input name="price" placeholder="Price in MWK" required>
-<input name="contact" placeholder="Your phone number or contact" required>
-<textarea name="description" placeholder="Product description"></textarea>
-<button class="button">Add product listing</button>
+<section id="sell" class="panel">
+<h2>📸 Sell on Malawi Connect</h2>
+<p>Add your product details below. Fields marked * are required.</p>
+<div class="note">Use a direct image URL for the product photo. Only add products you are authorized to sell. Never post passwords, PINs or sensitive personal information.</div>
+
+<form id="productForm" class="form">
+<label>Product name *
+<input name="name" maxlength="90" placeholder="e.g. Samsung Galaxy A15" required></label>
+
+<label>Category *
+<select name="category" required>
+<option value="">Choose category</option>
+<option>Phones & Electronics</option>
+<option>Fashion</option>
+<option>Vehicles</option>
+<option>Property</option>
+<option>Food & Agriculture</option>
+<option>Home & Furniture</option>
+<option>Beauty & Health</option>
+<option>Other</option>
+</select></label>
+
+<label>Price in Malawi Kwacha (MWK) *
+<input name="price" type="number" min="0" step="1" placeholder="e.g. 150000" required></label>
+
+<label>Product photo URL
+<input name="photo" type="url" placeholder="https://example.com/photo.jpg"></label>
+<p class="small">Optional. Use a direct link to an image ending in .jpg, .png or .webp when possible.</p>
+
+<label>Description *
+<textarea name="description" rows="3" maxlength="600" placeholder="Describe the condition and features..." required></textarea></label>
+
+<label>Seller name *
+<input name="seller" maxlength="70" placeholder="Your name or business name" required></label>
+
+<label>Location in Malawi *
+<input name="location" maxlength="100" placeholder="e.g. Area 3, Lilongwe" required></label>
+
+<label>Phone number *
+<input name="phone" type="tel" maxlength="20" placeholder="e.g. 0991234567" required></label>
+
+<button class="yellow" type="submit">＋ Publish listing on this device</button>
 </form>
+<p class="small">Your listings are stored only in this browser. They are not automatically published to other people's phones.</p>
 </section>
 
-<section id="jobs" class="section">
-<h2>💼 Jobs & Careers</h2>
-<p>Discover opportunities and share job vacancies.</p>
-<form class="form" id="jobForm">
-<input name="title" placeholder="Job title" required>
-<input name="company" placeholder="Company or employer" required>
-<input name="location" placeholder="Location in Malawi" required>
-<input name="contact" placeholder="Application contact" required>
-<button class="button">Post job vacancy</button>
-</form>
-<div id="jobListings"></div>
+<section class="panel">
+<h2>🔒 Shop safely</h2>
+<ul>
+<li>Check the product before paying.</li>
+<li>Meet in a safe public place when possible.</li>
+<li>Never share your banking PIN or verification codes.</li>
+<li>Beware of suspiciously cheap offers and advance-payment scams.</li>
+</ul>
 </section>
-
-<section id="education" class="section">
-<h2>🎓 Education & Learning</h2>
-<div class="grid">
-<div class="card"><div class="emoji">📚</div><h3>Study resources</h3><p>Organize learning materials and revision notes.</p></div>
-<div class="card"><div class="emoji">💻</div><h3>Digital skills</h3><p>Explore technology and online learning.</p></div>
-<div class="card"><div class="emoji">🏫</div><h3>Schools & colleges</h3><p>Discover education opportunities.</p></div>
-</div>
+<section id="about">
+<h2>About Malawi Connect</h2>
+<p>Our goal is to connect Malawi's buyers, sellers and businesses through one convenient platform.</p>
 </section>
-
-<section id="transport" class="section">
-<h2>🏍️ Transport booking</h2>
-<form class="form" id="rideForm">
-<select name="type"><option>Kabaza motorcycle</option><option>Taxi</option></select>
-<input name="pickup" placeholder="Pickup location" required>
-<input name="destination" placeholder="Destination" required>
-<input name="phone" placeholder="Your phone number" required>
-<button class="button">Prepare ride request</button>
-</form>
-</section>
-
-<section id="food" class="section">
-<h2>🍔 Food & Delivery</h2>
-<div class="grid">
-<div class="card"><div class="emoji">🍗</div><h3>Local meals</h3><p>Discover restaurants and local dishes.</p></div>
-<div class="card"><div class="emoji">🥟</div><h3>Snacks</h3><p>Explore snacks and refreshments.</p></div>
-</div>
-<form class="form" id="foodForm">
-<input name="meal" placeholder="Food or meal you want" required>
-<input name="restaurant" placeholder="Restaurant, if known">
-<input name="address" placeholder="Delivery location" required>
-<input name="phone" placeholder="Your phone number" required>
-<button class="button">Prepare food request</button>
-</form>
-</section>
-
-<section id="social" class="section">
-<h2>👥 Malawi Connect Community</h2>
-<form class="form" id="postForm">
-<input name="name" placeholder="Your display name" required>
-<textarea name="message" placeholder="What would you like to share?" required></textarea>
-<button class="button">Share update</button>
-</form>
-<div id="feed"></div>
-</section>
-
-<div id="notice" role="status"></div>
 </main>
 
 <footer>
-<div class="brand">🇲🇼 Malawi Connect</div>
-<p>Connecting people, businesses and opportunities across Malawi.</p>
-<p class="small">First prototype • Built for Malawi</p>
+<div class="brand">🇲🇼 Malawi <span>Connect</span></div>
+<p>Connecting Malawi, one opportunity at a time.</p>
+<p class="small">Marketplace prototype</p>
 </footer>
 
 <script>
-const notice=document.getElementById('notice');
-function inform(message){
-notice.textContent=message;
-notice.style.display='block';
-notice.scrollIntoView({behavior:'smooth',block:'nearest'});
+const $ = id => document.getElementById(id);
+const KEY = "malawi-connect-market-v1";
+
+const starter = [
+ {id:"demo1",name:"Smartphone",category:"Phones & Electronics",price:180000,photo:"",description:"Example listing. Replace it with your own product listing.",seller:"Example seller",location:"Lilongwe",phone:"0991234567",time:1,demo:true},
+ {id:"demo2",name:"Fashion clothing",category:"Fashion",price:15000,photo:"",description:"Example clothing listing. Contact the seller for details.",seller:"Example shop",location:"Blantyre",phone:"0991234567",time:2,demo:true}
+];
+
+let items=[];
+try {
+ const stored=localStorage.getItem(KEY);
+ items=stored===null?starter:JSON.parse(stored);
+ if(!Array.isArray(items)) items=starter;
+} catch(e) { items=starter; }
+
+function saveItems(){
+ try{
+  localStorage.setItem(KEY,JSON.stringify(items));
+  return true;
+ }catch(e){
+  alert("Your browser could not save this listing. Check available storage and try again.");
+  return false;
+ }
 }
-function searchItems(){
-const q=document.getElementById('search').value.toLowerCase();
-document.querySelectorAll('.searchable').forEach(card=>{
-card.style.display=card.textContent.toLowerCase().includes(q)?'':'none';
-});
+
+function el(tag,cls,text){
+ const n=document.createElement(tag);
+ if(cls)n.className=cls;
+ if(text!==undefined)n.textContent=text;
+ return n;
 }
-function addForm(id,container,render){
-document.getElementById(id).addEventListener('submit',function(e){
-e.preventDefault();
-const data=Object.fromEntries(new FormData(this).entries());
-render(data,container);
-this.reset();
-});
+
+function formatPrice(price){
+ return "MWK "+Number(price).toLocaleString("en-US");
 }
-function safe(value){
-const el=document.createElement('span');
-el.textContent=value||'';
-return el.innerHTML;
+
+function whatsappLink(phone,message){
+ let digits=phone.replace(/\D/g,"");
+ if(digits.startsWith("0")) digits="265"+digits.slice(1);
+ if(!digits.startsWith("265") && digits.length===9) digits="265"+digits;
+ if(digits.length<10 || digits.length>15) return "";
+ return "https://wa.me/"+digits+"?text="+encodeURIComponent(message);
 }
-addForm('productForm','products',(d,c)=>{
-const card=document.createElement('div');
-card.className='card searchable';
-card.innerHTML='<div class="emoji">📦</div><h3>'+safe(d.title)+'</h3><p>'+safe(d.description)+'</p><strong>MWK '+safe(d.price)+'</strong><p>Contact: '+safe(d.contact)+'</p>';
-c.prepend(card);
-inform('Product added to this page. It is not yet published online for other visitors.');
+
+function render(){
+ const query=($("search").value+" "+$("filterSearch").value).trim().toLowerCase();
+ const cat=$("category").value;
+ let shown=items.filter(p=>
+  (p.name+" "+p.description+" "+p.category+" "+p.location+" "+p.seller).toLowerCase().includes(query)
+  && (!cat || p.category===cat)
+ );
+ const sort=$("sort").value;
+ if(sort==="low")shown.sort((a,b)=>a.price-b.price);
+ else if(sort==="high")shown.sort((a,b)=>b.price-a.price);
+ else shown.sort((a,b)=>b.time-a.time);
+
+ const area=$("products");
+ area.replaceChildren();
+ $("count").textContent=shown.length+" listing(s)";
+
+ if(!shown.length){
+  area.append(el("div","empty","No products found. Try another search or category."));
+  return;
+ }
+
+ shown.forEach(p=>{
+  const card=el("article","card");
+  const img=el("img","photo");
+  img.alt=p.name;
+  img.loading="lazy";
+  img.src=p.photo || "data:image/svg+xml,"+encodeURIComponent(
+   '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#e2eee6"/><text x="50%" y="45%" font-size="42" text-anchor="middle">🇲🇼</text><text x="50%" y="72%" font-size="18" text-anchor="middle" fill="#087443">Malawi Connect</text></svg>'
+  );
+  img.onerror=()=>{img.removeAttribute("src");img.style.background="#e2eee6";img.alt="Photo unavailable";};
+  card.append(img);
+
+  const body=el("div","cardbody");
+  body.append(el("div","category",p.category));
+  body.append(el("h3","",p.name));
+  body.append(el("div","price",formatPrice(p.price)));
+  body.append(el("p","description",p.description));
+  body.append(el("div","seller","Seller: "+p.seller));
+  body.append(el("div","seller","📍 "+p.location));
+  body.append(el("div","seller","☎ "+p.phone));
+
+  const msg="Hello "+p.seller+", I am interested in "+p.name+" listed on Malawi Connect for "+formatPrice(p.price)+". Is it available?";
+  const wa=whatsappLink(p.phone,msg);
+  if(wa){
+   const contact=el("a","btn","Contact seller on WhatsApp");
+   contact.href=wa;
+   contact.target="_blank";
+   contact.rel="noopener noreferrer";
+   body.append(contact);
+  }else{
+   const contact=el("a","btn","Call seller");
+   contact.href="tel:"+p.phone.replace(/[^\d+]/g,"");
+   body.append(contact);
+  }
+
+  if(!p.demo){
+   const remove=el("button","","Delete my listing");
+   remove.type="button";
+   remove.style.background="#a62e2e";
+   remove.addEventListener("click",()=>{
+    if(confirm("Delete this listing from this browser?")){
+     items=items.filter(x=>x.id!==p.id);
+     saveItems();
+     render();
+    }
+   });
+   body.append(remove);
+  }else{
+   body.append(el("p","small","DEMO listing — example only"));
+  }
+  card.append(body);
+  area.append(card);
+ });
+}
+
+$("productForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const f=new FormData(e.currentTarget);
+ const price=Number(f.get("price"));
+ const photo=(f.get("photo")||"").trim();
+
+ if(!Number.isFinite(price)||price<0){
+  alert("Enter a valid price.");
+  return;
+ }
+ if(photo && !/^https?:\/\//i.test(photo)){
+  alert("Use an image link beginning with https:// or http://");
+  return;
+ }
+
+ const product={
+  id:"p"+Date.now()+Math.random().toString(36).slice(2,7),
+  name:f.get("name").trim(),
+  category:f.get("category"),
+  price:price,
+  photo:photo,
+  description:f.get("description").trim(),
+  seller:f.get("seller").trim(),
+  location:f.get("location").trim(),
+  phone:f.get("phone").trim(),
+  time:Date.now(),
+  demo:false
+ };
+
+ items.unshift(product);
+ if(!saveItems()){
+  items=items.filter(x=>x.id!==product.id);
+  return;
+ }
+ e.currentTarget.reset();
+ $("search").value="";
+ $("filterSearch").value="";
+ $("category").value="";
+ $("sort").value="new";
+ render();
+ $("marketplace").scrollIntoView({behavior:"smooth"});
+ alert("Your listing has been saved in this browser!");
 });
-addForm('jobForm','jobListings',(d,c)=>{
-const card=document.createElement('div');
-card.className='post';
-card.innerHTML='<h3>'+safe(d.title)+'</h3><p>'+safe(d.company)+' — '+safe(d.location)+'</p><p>Contact: '+safe(d.contact)+'</p>';
-c.prepend(card);
-inform('Job added to this page. It is not yet shared with other visitors.');
-});
-addForm('rideForm','',(d)=>{
-const msg='Ride request: '+d.type+'\nPickup: '+d.pickup+'\nDestination: '+d.destination+'\nPhone: '+d.phone;
-inform('Ride request prepared. No driver has been contacted and no booking is confirmed.');
-const a=document.createElement('a');
-a.className='button';
-a.textContent='Copy ride request';
-a.href='#transport';
-a.onclick=()=>{if(navigator.clipboard)navigator.clipboard.writeText(msg);return false};
-document.getElementById('rideForm').appendChild(a);
-});
-addForm('foodForm','',(d)=>{
-inform('Food request prepared. No restaurant or delivery driver has been contacted.');
-const p=document.createElement('p');
-p.textContent='Order: '+d.meal+' | Delivery: '+d.address+' | Contact: '+d.phone;
-document.getElementById('foodForm').appendChild(p);
-});
-addForm('postForm','feed',(d,c)=>{
-const post=document.createElement('div');
-post.className='post';
-post.innerHTML='<strong>'+safe(d.name)+'</strong><p>'+safe(d.message)+'</p><small>Just now</small>';
-c.prepend(post);
-inform('Your update has been added to this page only.');
-});
+
+$("search").addEventListener("input",render);
+$("filterSearch").addEventListener("input",render);
+$("category").addEventListener("change",render);
+$("sort").addEventListener("change",render);
+render();
 </script>
 </body>
 </html>
