@@ -46,6 +46,28 @@ footer{text-align:center;background:#073d2a;color:white;padding:25px 15px;margin
 </style>
 </head>
 <body>
+  
+<!-- Malawi Connect: Supabase connection -->
+<p id="supabase-status">Connecting to Malawi Connect services...</p>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "PASTE_YOUR_PROJECT_URL_HERE";
+  const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+
+  const malawiConnectDB = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+  
+sb_publishable_gs7nb44web4TD0ml18JX9w_Qj5Mg0OF
+  https://vkvcdhvfryqrnlmpzdlk.supabase.co/rest/v1/
+  window.malawiConnectDB = malawiConnectDB;
+
+  document.getElementById("supabase-status").textContent =
+    "Malawi Connect database client initialized!";
+</script>
+
 <header>
   <div class="brand">🇲🇼 Malawi <span>Connect</span></div>
   <p>Buy, sell and discover products across Malawi.</p>
