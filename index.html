@@ -45,22 +45,22 @@ footer{text-align:center;background:#073d2a;color:white;padding:25px 15px;margin
 }
 </style>
 </head>
-<body>
-  <!-- Malawi Connect Supabase -->
-<p id="supabase-status">
-Connecting to Malawi Connect services...
-</p>
+  
+<script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<body>
 
 <script>
-const SUPABASE_URL = https://vkvcdhvfryqrnlmpzdlk.supabase.co/rest/v1/
-const SUPABASE_PUBLISHABLE_KEY = sb_publishable_gs7nb44web4TD0ml18JX9w_Qj5Mg0OF
+  const client = new Appwrite.Client();
 
-const malawiConnectDB = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+  client
+    .setEndpoint("https://fra.cloud.appwrite.io/v1")
+    .setProject("6aef2b910034f745ae45");
+
+  const account = new Appwrite.Account(client);
+
+  console.log("Malawi Connect connected to Appwrite!");
+</script>
 
 window.malawiConnectDB = malawiConnectDB;
 
