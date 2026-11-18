@@ -1,490 +1,539 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <wonderful  charset="UTF-8">
-<mzilahowa name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malawi Connect Marketplace</title>
+<mzilahowa  name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Malawi Connect</title>
 
-<script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-body{margin:0;font-family:Arial;background:#f3f5f4;color:#222}
-header{background:#006b45;color:white;padding:18px}
-header h1{margin:0}
-header span{color:#ffd43b}
-main{padding:15px;max-width:1000px;margin:auto}
-section{background:white;padding:15px;margin-bottom:18px;border-radius:12px}
-input,select,textarea,button{box-sizing:border-box;width:100%;padding:12px;margin:7px 0;border-radius:7px;border:1px solid #ccc;font-size:15px}
-button{background:#006b45;color:white;border:none;font-weight:bold}
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;
+ background:#f3f5f7;color:#17202a;
+}
+header{
+ background:#075c42;color:white;
+ padding:18px;text-align:center;
+}
+header h1{margin:0;font-size:27px}
+header p{margin:6px 0 0}
+nav{
+ display:flex;overflow-x:auto;background:#fff;
+ position:sticky;top:0;z-index:10;
+ box-shadow:0 2px 5px #ddd;
+}
+nav button{
+ border:0;background:white;padding:15px;
+ white-space:nowrap;font-weight:bold;
+ color:#075c42;cursor:pointer;
+}
+nav button.active{background:#075c42;color:white}
+.container{max-width:900px;margin:auto;padding:15px}
+.section{display:none}
+.section.active{display:block}
+.card{
+ background:white;padding:16px;
+ border-radius:12px;margin:12px 0;
+ box-shadow:0 2px 7px #00000010;
+}
+input,textarea,select{
+ width:100%;padding:12px;margin:7px 0;
+ border:1px solid #ccc;border-radius:7px;
+ font-size:15px;
+}
+textarea{min-height:85px}
+button.primary{
+ background:#08764e;color:white;border:0;
+ border-radius:7px;padding:12px 18px;
+ cursor:pointer;font-weight:bold;
+}
+button.danger{background:#b52b2b}
 button:disabled{opacity:.5}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.product{background:white;border-radius:10px;overflow:hidden;border:1px solid #ddd}
-.product img{width:100%;height:150px;object-fit:cover;background:#eee}
-.product div{padding:10px}
-.price{color:#006b45;font-weight:bold;font-size:20px}
-footer{text-align:center;background:#003d2b;color:white;padding:25px}
+.item img{
+ width:100%;max-height:220px;
+ object-fit:cover;border-radius:8px;
+}
+.muted{color:#697782;font-size:13px}
+.price{color:#08764e;font-weight:bold;font-size:19px}
+footer{
+ text-align:center;padding:25px;
+ background:#075c42;color:white;margin-top:30px;
+}
+#message{padding:10px;border-radius:7px}
+.hidden{display:none!important}
 </style>
 </head>
 
 <body>
+
 <header>
-<h1>🇲🇼 Malawi <span>Connect</span></h1>
-<p>Buy, sell and discover products across Malawi.</p>
+<h1>🇲🇼 Malawi Connect</h1>
+<p>One Platform. Endless Possibilities.</p>
 </header>
 
-<main>
-
-<section>
-<h2>🔎 Explore Marketplace</h2>
-<input id="search" placeholder="Search phones, clothes, cars...">
-<select id="filter">
-<option value="">All categories</option>
-<option>Fashion</option>
-<option>Phones & Electronics</option>
-<option>Home & Furniture</option>
-<option>Vehicles</option>
-<option>Food</option>
-<option>Other</option>
-</select>
-<p id="status">Connecting to marketplace...</p>
-<div class="products" id="products"></div>
-</section>
-
-<section>
-<h2>🛍️ Sell a Product</h2>
-<form id="sellForm">
-<input id="name" placeholder="Product name" required>
-<select id="category" required>
-<option value="">Choose category</option>
-<option>Fashion</option>
-<option>Phones & Electronics</option>
-<option>Home & Furniture</option>
-<option>Vehicles</option>
-<option>Food</option>
-<option>Other</option>
-</select>
-<input id="price" type="number" min="1" placeholder="Price in MWK" required>
-<input id="imageUrl" type="url" placeholder="Product photo URL">
-<textarea id="description" placeholder="Product description" required></textarea>
-<input id="seller" placeholder="Seller name" required>
-<input id="location" placeholder="Location e.g. Lilongwe" required>
-<input id="phone" placeholder="WhatsApp number e.g. 265991234567" required>
-<button id="publish" type="submit">Publish Listing</button>
-</form>
-<p id="message"></p>
-</section>
-
-</main>
-
-<footer>
-<h2>🇲🇼 Malawi Connect</h2>
-Connecting Malawi, one opportunity at a time.
-</footer>
-
-<script>
-const client = new Appwrite.Client();
-
-client
-.setEndpoint("https://fra.cloud.appwrite.io/v1")
-.setProject("6aef2b910034f745ae45");
-
-const databases = new Appwrite.Databases(client);
-
-const DATABASE_ID = "6aef2c4000250a8c1194";
-const COLLECTION_ID = "YOUR_COLLECTION_ID";
-
-const productsEl = document.getElementById("products");
-const statusEl = document.getElementById("status");
-const form = document.getElementById("sellForm");
-const message = document.getElementById("message");
-
-let allProducts = [];
-
-async function loadProducts(){
-  statusEl.textContent = "Loading products...";
-  try{
-    const result = await databases.listDocuments(
-      DATABASE_ID,
-      COLLECTION_ID
-    );
-
-    allProducts = result.documents;
-    renderProducts();
-    statusEl.textContent = allProducts.length + " listing(s)";
-  }catch(error){
-    statusEl.textContent = "Connection error: " + error.message;
-  }
-}
-
-function renderProducts(){
-  const search = document.getElementById("search").value.toLowerCase();
-  const category = document.getElementById("filter").value;
-
-  productsEl.innerHTML = "";
-
-  const filtered = allProducts.filter(p =>
-    (p.name || "").toLowerCase().includes(search) &&
-    (!category || p.category === category)
-  );
-
-  filtered.forEach(p => {
-    const card = document.createElement("article");
-    card.className = "product";
-
-    const img = document.createElement("img");
-    img.src = p.imageUrl || "";
-    img.alt = p.name;
-    img.onerror = () => img.style.display = "none";
-
-    const content = document.createElement("div");
-
-    const title = document.createElement("h3");
-    title.textContent = p.name;
-
-    const price = document.createElement("p");
-    price.className = "price";
-    price.textContent = "MWK " + Number(p.price).toLocaleString();
-
-    const desc = document.createElement("p");
-    desc.textContent = p.description;
-
-    const seller = document.createElement("p");
-    seller.textContent = "Seller: " + p.seller;
-
-    const location = document.createElement("p");
-    location.textContent = "📍 " + p.location;
-
-    const contact = document.createElement("a");
-    contact.href = "https://wa.me/" +
-      String(p.phone).replace(/\D/g,"") +
-      "?text=" + encodeURIComponent("Hello, I'm interested in " + p.name);
-    contact.target = "_blank";
-    contact.rel = "noopener";
-    contact.textContent = "Contact seller on WhatsApp";
-
-    content.append(title,price,desc,seller,location,contact);
-    card.append(img,content);
-    productsEl.appendChild(card);
-  });
-
-  if(filtered.length === 0){
-    productsEl.textContent = "No products found.";
-  }
-}
-
-document.getElementById("search").addEventListener("input",renderProducts);
-document.getElementById("filter").addEventListener("change",renderProducts);
-
-form.addEventListener("submit",async e=>{
-  e.preventDefault();
-
-  const button = document.getElementById("publish");
-  button.disabled = true;
-  message.textContent = "Publishing...";
-
-  try{
-    await databases.createDocument(
-      DATABASE_ID,
-      COLLECTION_ID,
-      Appwrite.ID.unique(),
-      {
-        name:document.getElementById("name").value,
-        category:document.getElementById("category").value,
-        price:Number(document.getElementById("price").value),
-        imageUrl:document.getElementById("imageUrl").value,
-        description:document.getElementById("description").value,
-        seller:document.getElementById("seller").value,
-        location:document.getElementById("location").value,
-        phone:document.getElementById("phone").value
-      }
-    );
-
-    message.textContent = "Product published successfully!";
-    form.reset();
-    await loadProducts();
-
-  }catch(error){
-    message.textContent = "Publishing failed: " + error.message;
-  }finally{
-    button.disabled = false;
-  }
-});
-
-loadProducts();
-</script>
-</body>
-</html>  <a href="#about">About</a>
+<nav>
+<button class="active" onclick="showSection('home',this)">Home</button>
+<button onclick="showSection('social',this)">Social</button>
+<button onclick="showSection('marketplace',this)">Market</button>
+<button onclick="showSection('jobs',this)">Jobs</button>
+<button onclick="showSection('education',this)">Education</button>
+<button onclick="showSection('kabaza',this)">Kabaza</button>
+<button onclick="showSection('taxi',this)">Taxi</button>
+<button onclick="showSection('food',this)">Food</button>
+<button onclick="showSection('account',this)">Account</button>
 </nav>
 
-<main>
-<section class="hero" id="home">
-  <h1>Everything you need, in one marketplace.</h1>
-  <p>Discover local products, compare prices and contact sellers directly.</p>
-  <a href="#marketplace" class="btn yellow">Explore products ↓</a>
-</section>
+<div class="container">
 
-<section id="marketplace">
-<h2>🛍️ Explore the marketplace</h2>
-<p class="small">Browse listings or search for something specific.</p>
-<div class="filters">
-  <input id="filterSearch" placeholder="Search products..." aria-label="Filter products">
-  <select id="category" aria-label="Choose category">
-    <option value="">All categories</option>
-    <option>Phones & Electronics</option>
-    <option>Fashion</option>
-    <option>Vehicles</option>
-    <option>Property</option>
-    <option>Food & Agriculture</option>
-    <option>Home & Furniture</option>
-    <option>Beauty & Health</option>
-    <option>Other</option>
-  </select>
-  <select id="sort" aria-label="Sort products">
-    <option value="new">Newest first</option>
-    <option value="low">Price: low to high</option>
-    <option value="high">Price: high to low</option>
-  </select>
+<div id="message" class="hidden"></div>
+
+<!-- HOME -->
+<section id="home" class="section active">
+<div class="card">
+<h2>Welcome to Malawi Connect!</h2>
+<p>Connect, buy, sell, learn, find jobs, travel and order food all in one place.</p>
 </div>
-<p id="count" class="small"></p>
-<div id="products" class="products"></div>
+
+<div class="card">
+<h3>Explore Malawi Connect</h3>
+<p>Choose a service below:</p>
+<button class="primary" onclick="go('marketplace')">Shop Now</button>
+<button class="primary" onclick="go('jobs')">Find Jobs</button>
+<button class="primary" onclick="go('kabaza')">Book Kabaza</button>
+<button class="primary" onclick="go('food')">Order Food</button>
+</div>
+
+<div class="card">
+<h3>Latest Marketplace Products</h3>
+<div id="homeProducts">Loading...</div>
+</div>
 </section>
 
-<section id="sell" class="panel">
-<h2>📸 Sell on Malawi Connect</h2>
-<p>Add your product details below. Fields marked * are required.</p>
-<div class="note">Use a direct image URL for the product photo. Only add products you are authorized to sell. Never post passwords, PINs or sensitive personal information.</div>
-
-<form id="productForm" class="form">
-<label>Product name *
-<input name="name" maxlength="90" placeholder="e.g. Samsung Galaxy A15" required></label>
-
-<label>Category *
-<select name="category" required>
-<option value="">Choose category</option>
-<option>Phones & Electronics</option>
-<option>Fashion</option>
-<option>Vehicles</option>
-<option>Property</option>
-<option>Food & Agriculture</option>
-<option>Home & Furniture</option>
-<option>Beauty & Health</option>
-<option>Other</option>
-</select></label>
-
-<label>Price in Malawi Kwacha (MWK) *
-<input name="price" type="number" min="0" step="1" placeholder="e.g. 150000" required></label>
-
-<label>Product photo URL
-<input name="photo" type="url" placeholder="https://example.com/photo.jpg"></label>
-<p class="small">Optional. Use a direct link to an image ending in .jpg, .png or .webp when possible.</p>
-
-<label>Description *
-<textarea name="description" rows="3" maxlength="600" placeholder="Describe the condition and features..." required></textarea></label>
-
-<label>Seller name *
-<input name="seller" maxlength="70" placeholder="Your name or business name" required></label>
-
-<label>Location in Malawi *
-<input name="location" maxlength="100" placeholder="e.g. Area 3, Lilongwe" required></label>
-
-<label>Phone number *
-<input name="phone" type="tel" maxlength="20" placeholder="e.g. 0991234567" required></label>
-
-<button class="yellow" type="submit">＋ Publish listing on this device</button>
-</form>
-<p class="small">Your listings are stored only in this browser. They are not automatically published to other people's phones.</p>
+<!-- SOCIAL -->
+<section id="social" class="section">
+<h2>Community Social Media</h2>
+<div class="card">
+<h3>Create a Post</h3>
+<textarea id="postContent" placeholder="What's happening in Malawi?"></textarea>
+<button class="primary" onclick="createPost()">Publish Post</button>
+</div>
+<h3>Community Posts</h3>
+<div id="posts">Loading posts...</div>
 </section>
 
-<section class="panel">
-<h2>🔒 Shop safely</h2>
-<ul>
-<li>Check the product before paying.</li>
-<li>Meet in a safe public place when possible.</li>
-<li>Never share your banking PIN or verification codes.</li>
-<li>Beware of suspiciously cheap offers and advance-payment scams.</li>
-</ul>
+<!-- MARKETPLACE -->
+<section id="marketplace" class="section">
+<h2>Malawi Marketplace</h2>
+<p>Buy and sell products across Malawi.</p>
+<div class="card">
+<h3>Sell a Product</h3>
+<div id="marketForm"></div>
+</div>
+<div id="marketItems">Loading products...</div>
 </section>
-<section id="about">
-<h2>About Malawi Connect</h2>
-<p>Our goal is to connect Malawi's buyers, sellers and businesses through one convenient platform.</p>
+
+<!-- JOBS -->
+<section id="jobs" class="section">
+<h2>Find Jobs in Malawi</h2>
+<div class="card">
+<h3>Advertise a Job</h3>
+<div id="jobForm"></div>
+</div>
+<div id="jobItems">Loading jobs...</div>
 </section>
-</main>
+
+<!-- EDUCATION -->
+<section id="education" class="section">
+<h2>Education and Learning</h2>
+<div class="card">
+<h3>Publish a Course</h3>
+<div id="educationForm"></div>
+</div>
+<div id="educationItems">Loading courses...</div>
+</section>
+
+<!-- KABAZA -->
+<section id="kabaza" class="section">
+<h2>Book a Kabaza</h2>
+<div class="card">
+<h3>Find a Kabaza Rider</h3>
+<p>Browse available riders and send a booking request.</p>
+<div id="kabazaItems">Loading riders...</div>
+</div>
+<div id="kabazaForm"></div>
+</section>
+
+<!-- TAXI -->
+<section id="taxi" class="section">
+<h2>Malawi Connect Taxi</h2>
+<div id="taxiItems">Loading taxis...</div>
+<div id="taxiForm"></div>
+</section>
+
+<!-- FOOD -->
+<section id="food" class="section">
+<h2>Food Ordering</h2>
+<div class="card">
+<h3>Restaurants and Food Sellers</h3>
+<div id="foodForm"></div>
+</div>
+<div id="foodItems">Loading food...</div>
+</section>
+
+<!-- ACCOUNT -->
+<section id="account" class="section">
+<h2>Your Account</h2>
+<div class="card">
+<div id="userStatus">You are not logged in.</div>
+
+<h3>Register</h3>
+<input id="regEmail" type="email" placeholder="Email address">
+<input id="regPassword" type="password" placeholder="Password (at least 6 characters)">
+<button class="primary" onclick="register()">Create Account</button>
+
+<hr>
+<h3>Login</h3>
+<input id="loginEmail" type="email" placeholder="Email address">
+<input id="loginPassword" type="password" placeholder="Password">
+<button class="primary" onclick="login()">Login</button>
+
+<hr>
+<button class="primary danger" onclick="logout()">Logout</button>
+</div>
+
+<div class="card">
+<h3>My Requests</h3>
+<div id="myRequests">Login to see your requests.</div>
+</div>
+</section>
+
+</div>
 
 <footer>
-<div class="brand">🇲🇼 Malawi <span>Connect</span></div>
-<p>Connecting Malawi, one opportunity at a time.</p>
-<p class="small">Marketplace prototype</p>
+<h3>Malawi Connect 🇲🇼</h3>
+<p>Connecting Malawi to endless opportunities.</p>
+<p>© 2026 Malawi Connect</p>
 </footer>
 
 <script>
-const $ = id => document.getElementById(id);
-const KEY = "malawi-connect-market-v1";
+// ===================================
+// SUPABASE CONNECTION
+// ===================================
 
-const starter = [
- {id:"demo1",name:"Smartphone",category:"Phones & Electronics",price:180000,photo:"",description:"Example listing. Replace it with your own product listing.",seller:"Example seller",location:"Lilongwe",phone:"0991234567",time:1,demo:true},
- {id:"demo2",name:"Fashion clothing",category:"Fashion",price:15000,photo:"",description:"Example clothing listing. Contact the seller for details.",seller:"Example shop",location:"Blantyre",phone:"0991234567",time:2,demo:true}
-];
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
 
-let items=[];
-try {
- const stored=localStorage.getItem(KEY);
- items=stored===null?starter:JSON.parse(stored);
- if(!Array.isArray(items)) items=starter;
-} catch(e) { items=starter; }
+const db = window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
 
-function saveItems(){
- try{
-  localStorage.setItem(KEY,JSON.stringify(items));
-  return true;
- }catch(e){
-  alert("Your browser could not save this listing. Check available storage and try again.");
+let currentUser = null;
+
+function notify(message){
+ const el=document.getElementById("message");
+ el.textContent=message;
+ el.classList.remove("hidden");
+ window.scrollTo(0,0);
+ setTimeout(()=>el.classList.add("hidden"),5000);
+}
+
+function escapeHTML(value){
+ return String(value ?? "").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",
+ '"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+function money(value){
+ return "MK "+Number(value||0).toLocaleString();
+}
+
+function showSection(id,button){
+ document.querySelectorAll(".section").forEach(s=>{
+  s.classList.remove("active");
+ });
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>{
+  b.classList.remove("active");
+ });
+ if(button)button.classList.add("active");
+ window.scrollTo(0,0);
+ if(id==="social")loadPosts();
+ if(id==="marketplace")loadListings("marketplace","marketItems");
+ if(id==="jobs")loadListings("jobs","jobItems");
+ if(id==="education")loadListings("education","educationItems");
+ if(id==="kabaza")loadListings("kabaza","kabazaItems");
+ if(id==="taxi")loadListings("taxi","taxiItems");
+ if(id==="food")loadListings("food","foodItems");
+ if(id==="account")loadRequests();
+}
+
+function go(id){
+ const buttons=[...document.querySelectorAll("nav button")];
+ const b=buttons.find(x=>x.getAttribute("onclick")?.includes("'"+id+"'"));
+ showSection(id,b);
+}
+
+function requireLogin(){
+ if(!currentUser){
+  notify("Please create an account or login first.");
+  go("account");
   return false;
  }
+ return true;
 }
 
-function el(tag,cls,text){
- const n=document.createElement(tag);
- if(cls)n.className=cls;
- if(text!==undefined)n.textContent=text;
- return n;
-}
+// ===================================
+// AUTHENTICATION
+// ===================================
 
-function formatPrice(price){
- return "MWK "+Number(price).toLocaleString("en-US");
-}
-
-function whatsappLink(phone,message){
- let digits=phone.replace(/\D/g,"");
- if(digits.startsWith("0")) digits="265"+digits.slice(1);
- if(!digits.startsWith("265") && digits.length===9) digits="265"+digits;
- if(digits.length<10 || digits.length>15) return "";
- return "https://wa.me/"+digits+"?text="+encodeURIComponent(message);
-}
-
-function render(){
- const query=($("search").value+" "+$("filterSearch").value).trim().toLowerCase();
- const cat=$("category").value;
- let shown=items.filter(p=>
-  (p.name+" "+p.description+" "+p.category+" "+p.location+" "+p.seller).toLowerCase().includes(query)
-  && (!cat || p.category===cat)
- );
- const sort=$("sort").value;
- if(sort==="low")shown.sort((a,b)=>a.price-b.price);
- else if(sort==="high")shown.sort((a,b)=>b.price-a.price);
- else shown.sort((a,b)=>b.time-a.time);
-
- const area=$("products");
- area.replaceChildren();
- $("count").textContent=shown.length+" listing(s)";
-
- if(!shown.length){
-  area.append(el("div","empty","No products found. Try another search or category."));
+async function register(){
+ const email=document.getElementById("regEmail").value.trim();
+ const password=document.getElementById("regPassword").value;
+ if(!email||password.length<6){
+  notify("Enter a valid email and password of at least 6 characters.");
   return;
  }
-
- shown.forEach(p=>{
-  const card=el("article","card");
-  const img=el("img","photo");
-  img.alt=p.name;
-  img.loading="lazy";
-  img.src=p.photo || "data:image/svg+xml,"+encodeURIComponent(
-   '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#e2eee6"/><text x="50%" y="45%" font-size="42" text-anchor="middle">🇲🇼</text><text x="50%" y="72%" font-size="18" text-anchor="middle" fill="#087443">Malawi Connect</text></svg>'
-  );
-  img.onerror=()=>{img.removeAttribute("src");img.style.background="#e2eee6";img.alt="Photo unavailable";};
-  card.append(img);
-
-  const body=el("div","cardbody");
-  body.append(el("div","category",p.category));
-  body.append(el("h3","",p.name));
-  body.append(el("div","price",formatPrice(p.price)));
-  body.append(el("p","description",p.description));
-  body.append(el("div","seller","Seller: "+p.seller));
-  body.append(el("div","seller","📍 "+p.location));
-  body.append(el("div","seller","☎ "+p.phone));
-
-  const msg="Hello "+p.seller+", I am interested in "+p.name+" listed on Malawi Connect for "+formatPrice(p.price)+". Is it available?";
-  const wa=whatsappLink(p.phone,msg);
-  if(wa){
-   const contact=el("a","btn","Contact seller on WhatsApp");
-   contact.href=wa;
-   contact.target="_blank";
-   contact.rel="noopener noreferrer";
-   body.append(contact);
-  }else{
-   const contact=el("a","btn","Call seller");
-   contact.href="tel:"+p.phone.replace(/[^\d+]/g,"");
-   body.append(contact);
-  }
-
-  if(!p.demo){
-   const remove=el("button","","Delete my listing");
-   remove.type="button";
-   remove.style.background="#a62e2e";
-   remove.addEventListener("click",()=>{
-    if(confirm("Delete this listing from this browser?")){
-     items=items.filter(x=>x.id!==p.id);
-     saveItems();
-     render();
-    }
-   });
-   body.append(remove);
-  }else{
-   body.append(el("p","small","DEMO listing — example only"));
-  }
-  card.append(body);
-  area.append(card);
- });
+ const {error}=await db.auth.signUp({email,password});
+ if(error){notify(error.message);return;}
+ notify("Registration submitted. Check your email if verification is required.");
 }
 
-$("productForm").addEventListener("submit",e=>{
- e.preventDefault();
- const f=new FormData(e.currentTarget);
- const price=Number(f.get("price"));
- const photo=(f.get("photo")||"").trim();
+async function login(){
+ const email=document.getElementById("loginEmail").value.trim();
+ const password=document.getElementById("loginPassword").value;
+ const {data,error}=await db.auth.signInWithPassword({email,password});
+ if(error){notify(error.message);return;}
+ currentUser=data.user;
+ updateAccount();
+ notify("Welcome back!");
+}
 
- if(!Number.isFinite(price)||price<0){
-  alert("Enter a valid price.");
-  return;
- }
- if(photo && !/^https?:\/\//i.test(photo)){
-  alert("Use an image link beginning with https:// or http://");
-  return;
- }
+async function logout(){
+ const {error}=await db.auth.signOut();
+ if(error){notify(error.message);return;}
+ currentUser=null;
+ updateAccount();
+ notify("You have logged out.");
+}
 
- const product={
-  id:"p"+Date.now()+Math.random().toString(36).slice(2,7),
-  name:f.get("name").trim(),
-  category:f.get("category"),
-  price:price,
-  photo:photo,
-  description:f.get("description").trim(),
-  seller:f.get("seller").trim(),
-  location:f.get("location").trim(),
-  phone:f.get("phone").trim(),
-  time:Date.now(),
-  demo:false
- };
+function updateAccount(){
+ document.getElementById("userStatus").textContent=
+ currentUser ? "Logged in: "+currentUser.email : "You are not logged in.";
+}
 
- items.unshift(product);
- if(!saveItems()){
-  items=items.filter(x=>x.id!==product.id);
-  return;
- }
- e.currentTarget.reset();
- $("search").value="";
- $("filterSearch").value="";
- $("category").value="";
- $("sort").value="new";
- render();
- $("marketplace").scrollIntoView({behavior:"smooth"});
- alert("Your listing has been saved in this browser!");
+db.auth.getSession().then(({data})=>{
+ currentUser=data.session?.user||null;
+ updateAccount();
+ loadHome();
 });
 
-$("search").addEventListener("input",render);
-$("filterSearch").addEventListener("input",render);
-$("category").addEventListener("change",render);
-$("sort").addEventListener("change",render);
-render();
+db.auth.onAuthStateChange((event,session)=>{
+ currentUser=session?.user||null;
+ updateAccount();
+});
+
+// ===================================
+// LISTING FORMS
+// ===================================
+
+function formHTML(category){
+ const labels={
+ marketplace:"Product",
+ jobs:"Job",
+ education:"Course",
+ kabaza:"Kabaza Rider",
+ taxi:"Taxi Service",
+ food:"Food or Restaurant"
+ };
+ const label=labels[category];
+ return `
+ <input id="${category}Title" placeholder="${label} name or title" required>
+ <textarea id="${category}Description" placeholder="Description and details"></textarea>
+ <input id="${category}Price" type="number" min="0" placeholder="Price in Malawi Kwacha (MK)">
+ <input id="${category}Location" placeholder="Location or town">
+ <input id="${category}Contact" placeholder="Phone or WhatsApp number">
+ <input id="${category}Image" type="url" placeholder="Image URL (optional)">
+ <button class="primary" onclick="publishListing('${category}')">Publish ${label}</button>
+ `;
+}
+
+["marketplace","jobs","education","food"].forEach(category=>{
+ document.getElementById(category==="marketplace"?"marketForm":
+ category==="jobs"?"jobForm":
+ category==="education"?"educationForm":"foodForm"
+ ).innerHTML=formHTML(category);
+});
+
+document.getElementById("kabazaForm").innerHTML=
+ formHTML("kabaza");
+document.getElementById("taxiForm").innerHTML=
+ formHTML("taxi");
+
+async function publishListing(category){
+ if(!requireLogin())return;
+
+ const title=document.getElementById(category+"Title").value.trim();
+ const description=document.getElementById(category+"Description").value.trim();
+ const price=document.getElementById(category+"Price").value;
+ const location=document.getElementById(category+"Location").value.trim();
+ const contact=document.getElementById(category+"Contact").value.trim();
+ const image_url=document.getElementById(category+"Image").value.trim();
+
+ if(!title){notify("Please enter a title.");return;}
+
+ const {error}=await db.from("mc_listings").insert({
+  user_id:currentUser.id,
+  category,title,description,
+  price:Number(price||0),location,contact,image_url
+ });
+
+ if(error){notify(error.message);return;}
+
+ notify("Your listing has been published!");
+ document.getElementById(category+"Title").value="";
+ document.getElementById(category+"Description").value="";
+ document.getElementById(category+"Price").value="";
+ document.getElementById(category+"Location").value="";
+ document.getElementById(category+"Contact").value="";
+ document.getElementById(category+"Image").value="";
+
+ loadListings(category,
+ category==="marketplace"?"marketItems":
+ category==="jobs"?"jobItems":
+ category==="education"?"educationItems":
+ category==="kabaza"?"kabazaItems":
+ category==="taxi"?"taxiItems":"foodItems");
+}
+
+// ===================================
+// LOAD LISTINGS
+// ===================================
+
+function listingHTML(item){
+ const image=item.image_url?
+ `<img src="${escapeHTML(item.image_url)}" alt="Listing image" loading="lazy" onerror="this.style.display='none'">`:"";
+ const phone=(item.contact||"").replace(/[^0-9+]/g,"");
+ const whatsapp=phone?
+ `<a href="https://wa.me/${encodeURIComponent(phone.replace("+",""))}" target="_blank" rel="noopener">Contact on WhatsApp</a>`:"";
+ return `
+ <div class="card item">
+ ${image}
+ <h3>${escapeHTML(item.title)}</h3>
+ <p>${escapeHTML(item.description)}</p>
+ <div class="price">${money(item.price)}</div>
+ <p class="muted">📍 ${escapeHTML(item.location||"Malawi")}</p>
+ <p>${escapeHTML(item.contact||"")}</p>
+ ${whatsapp}
+ <br><br>
+ <button class="primary" onclick="sendRequest('${item.id}','${item.category}')">
+ ${item.category==="food"?"Order Food":
+ item.category==="kabaza"?"Book Rider":
+ item.category==="taxi"?"Book Taxi":
+ item.category==="jobs"?"Apply / Enquire":
+ item.category==="education"?"Enquire About Course":"Enquire"}
+ </button>
+ </div>`;
+}
+
+async function loadListings(category,elementId){
+ const element=document.getElementById(elementId);
+ element.textContent="Loading...";
+ const {data,error}=await db.from("mc_listings")
+ .select("*").eq("category",category)
+ .order("created_at",{ascending:false}).limit(50);
+ if(error){element.textContent=error.message;return;}
+ element.innerHTML=data.length?
+ data.map(listingHTML).join(""):"No listings yet. Be the first to publish!";
+}
+
+// ===================================
+// BOOKING AND ORDER REQUESTS
+// ===================================
+
+async function sendRequest(id,category){
+ if(!requireLogin())return;
+ const details=prompt("Enter your request details, such as your requirements or location:");
+ if(details===null)return;
+
+ const {error}=await db.from("mc_requests").insert({
+  user_id:currentUser.id,
+  listing_id:id,
+  request_type:category,
+  details
+ });
+
+ if(error){notify(error.message);return;}
+ notify("Your request has been submitted!");
+}
+
+async function loadRequests(){
+ const el=document.getElementById("myRequests");
+ if(!currentUser){el.textContent="Login to see your requests.";return;}
+
+ const {data,error}=await db.from("mc_requests")
+ .select("*").order("created_at",{ascending:false});
+
+ if(error){el.textContent=error.message;return;}
+ const mine=data.filter(x=>x.user_id===currentUser.id);
+ el.innerHTML=mine.length?mine.map(x=>`
+ <div class="card">
+ <b>${escapeHTML(x.request_type)}</b>
+ <p>${escapeHTML(x.details)}</p>
+ <p class="muted">Status: ${escapeHTML(x.status)}</p>
+ </div>`).join(""):"You have no requests yet.";
+}
+
+// ===================================
+// SOCIAL MEDIA
+// ===================================
+
+async function createPost(){
+ if(!requireLogin())return;
+ const content=document.getElementById("postContent").value.trim();
+ if(!content){notify("Write something first.");return;}
+
+ const {error}=await db.from("mc_posts").insert({
+  user_id:currentUser.id,content
+ });
+ if(error){notify(error.message);return;}
+ document.getElementById("postContent").value="";
+ notify("Your post has been published!");
+ loadPosts();
+}
+
+async function loadPosts(){
+ const el=document.getElementById("posts");
+ const {data,error}=await db.from("mc_posts")
+ .select("*").order("created_at",{ascending:false}).limit(50);
+ if(error){el.textContent=error.message;return;}
+ el.innerHTML=data.length?data.map(post=>`
+ <div class="card">
+ <p>${escapeHTML(post.content)}</p>
+ <p class="muted">${new Date(post.created_at).toLocaleString()}</p>
+ </div>`).join(""):"No community posts yet.";
+}
+
+// ===================================
+// HOME PAGE
+// ===================================
+
+async function loadHome(){
+ const el=document.getElementById("homeProducts");
+ const {data,error}=await db.from("mc_listings")
+ .select("*").eq("category","marketplace")
+ .order("created_at",{ascending:false}).limit(4);
+ if(error){el.textContent=error.message;return;}
+ el.innerHTML=data.length?data.map(listingHTML).join(""):"No products available yet.";
+}
+
+loadHome();
+
 </script>
 </body>
 </html>
+
